@@ -1,5 +1,6 @@
 ﻿using AverBlog.Business.IServices;
 using AverBlog.Business.ServiceModels;
+using AverBlog.Data.DADtos;
 using AverBlog.Data.Enitities;
 using AverBlog.Data.IRepository;
 using System;
@@ -45,7 +46,7 @@ namespace AverBlog.Business.Services
 
         public async Task<(int count, List<UserServiceModel>)> GetUsers(string keyWord, DateTime joinedAfter, int startIndex, int pageSize)
         {
-           (int count, List<User> users) = await _userRepository.GetUsers(keyWord , joinedAfter, startIndex, pageSize);
+           (int count, List<UsersFilterDataResponse> users) = await _userRepository.GetUsers(keyWord , joinedAfter, startIndex, pageSize);
 
             var userServiceModels = users.Select(x => new UserServiceModel
             {
@@ -55,7 +56,9 @@ namespace AverBlog.Business.Services
                 FullName = x.FullName,
                 Bio = x.Bio,
                 JoinedOn = x.JoinedOn,
-                ProfileImageUrl = x.ProfileImageUrl
+                ProfileImageUrl = x.ProfileImageUrl,
+
+                PostCount = x.PostCount,
             }).ToList();
             return (count, userServiceModels) ;
         }

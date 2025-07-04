@@ -63,7 +63,7 @@ namespace AverBlog.Api.Controllers
         [HttpGet("users")]
         public async Task< ActionResult< PaginatedResponse<UserResponse>>> GetUsers([FromQuery] UserFilter request)
         {
-            (int count ,var userServiceList) = await _userService.GetUsers(request.KeyWord,request.JoinedAfter, request.StartIndex , request.PageSize);
+            (int count , List<UserServiceModel>? userServiceList) = await _userService.GetUsers(request.KeyWord,request.JoinedAfter, request.StartIndex , request.PageSize);
 
             var apiResponse = new List<UserResponse>();
 
@@ -77,7 +77,8 @@ namespace AverBlog.Api.Controllers
                     Bio = userServiceModel.Bio,
                     FullName = userServiceModel.FullName,
                     JoinedOn = userServiceModel.JoinedOn,
-                    ProfileImageUrl = userServiceModel.ProfileImageUrl
+                    ProfileImageUrl = userServiceModel.ProfileImageUrl,
+                    TotalPosts = userServiceModel.PostCount
                 };
 
                 apiResponse.Add(userResponse);
@@ -93,6 +94,9 @@ namespace AverBlog.Api.Controllers
 
             return Ok(response);
         }
+
+
+        
 
 
     }

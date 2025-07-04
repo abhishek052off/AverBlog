@@ -46,7 +46,7 @@ namespace AverBlog.Data
                 .RuleFor(p => p.CreatedAt, f => f.Date.Past(2))
                 .RuleFor(p => p.UserId, f => f.PickRandom(userIds));
 
-            var posts = postFaker.Generate(500);
+            var posts = postFaker.Generate(count);
             context.Posts.AddRange(posts);
             context.SaveChanges();
         }

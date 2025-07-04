@@ -1,4 +1,5 @@
 ﻿using AverBlog.Data.Contexts;
+using AverBlog.Data.DADtos;
 using AverBlog.Data.Enitities;
 using AverBlog.Data.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ namespace AverBlog.Data.Repository
 
         
 
-        public async Task< (int count , List<User> )  > GetUsers(string keyWord, DateTime joinedAfter, int startIndex, int pageSize)
+        public async Task< (int count , List<UsersFilterDataResponse> )  > GetUsers(string keyWord, DateTime joinedAfter, int startIndex, int pageSize)
         {
             IQueryable<User> usersQuery = _context.Users;
 
@@ -59,7 +60,18 @@ namespace AverBlog.Data.Repository
             //taking a slice of the records
             usersQuery = usersQuery.Skip(startIndex).Take(pageSize);
 
-            var userMaterialisedList = await usersQuery.ToListAsync();
+            var userMaterialisedList = await usersQuery.Select(x => new UsersFilterDataResponse
+            {
+                Id = x.Id,
+                Username = x.Username,
+                FullName = x.FullName,
+                JoinedOn = x.JoinedOn,
+                Bio = x.Bio,
+                Email = x.Email,
+                ProfileImageUrl = x.ProfileImageUrl,
+                PostCount = x.Posts.Count 
+            }).ToListAsync();
+
             return (totalRecordsMatched , userMaterialisedList) ; 
         }
 

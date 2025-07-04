@@ -9,5 +9,7 @@
         public string Bio { get; set; }
         public string ProfileImageUrl { get; set; }
         public DateTime JoinedOn { get; set; }
+
+        public int TotalPosts { get; set; }
     }
 }
