@@ -3,6 +3,7 @@ using AverBlog.Business.IServices;
 using AverBlog.Business.ServiceModels;
 using AverBlog.Data;
 using AverBlog.Data.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace AverBlog.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,13 +21,13 @@ namespace AverBlog.Api.Controllers
         public UsersController(IUserService userService  )
         {
             _userService = userService;
-            
         }
 
         [HttpPost("create-user")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserResponse>> CreateUser([FromBody]UserCreateRequest request)
         {
-            var userServiceModel =  await _userService.CreateUser(request.UserName , request.Email);
+            var userServiceModel =  await _userService.CreateUser(request.UserName , request.Email ,request.Password);
 
             var apiResponse = new UserResponse
             {

@@ -2,6 +2,7 @@
 using AverBlog.Business.ServiceModels;
 using AverBlog.Data.DADtos;
 using AverBlog.Data.Enitities;
+using AverBlog.Data.Exceptions;
 using AverBlog.Data.IRepository;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,13 @@ namespace AverBlog.Business.Services
         {
             _userRepository = userRepsitory;
         }
-        public async Task<UserServiceModel> CreateUser(string userName, string email)
+        public async Task<UserServiceModel> CreateUser(string userName, string email, string password)
         {
             var user = new User();
             user.Username = userName;
             user.Email = email;
             user.JoinedOn = DateTime.Now;
+            user.Password = password;
 
             user.FullName = string.Empty;
             user.Bio = string.Empty;
@@ -69,7 +71,7 @@ namespace AverBlog.Business.Services
 
             if(user == null)
             {
-                throw new Exception($"User with id {id} not found.");
+                throw new NotFoundException($"User with id {id} not found.");
             }
 
             user.Bio = bio;
@@ -77,6 +79,50 @@ namespace AverBlog.Business.Services
             user.ProfileImageUrl = profileImageUrl;
 
             await _userRepository.UpdateUser(user);
+
+            return new UserServiceModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FullName = user.FullName,
+                Bio = user.Bio,
+                JoinedOn = user.JoinedOn,
+                ProfileImageUrl = user.ProfileImageUrl
+            };
+        }
+
+        public async Task<UserServiceModel> AuthenticateUser(string email , string password)
+        {
+            var user = await _userRepository.GetUserByEmail(email);
+
+            if(user == null)
+            {
+                throw new NotFoundException($"User with email {email} not found.");
+            }
+
+            if(user.Password != password)
+            {
+                throw new Exception("Invalid password.");
+            }
+
+
+            return new UserServiceModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FullName = user.FullName,
+                Bio = user.Bio,
+                JoinedOn = user.JoinedOn,
+                ProfileImageUrl = user.ProfileImageUrl
+            };
+
+        }
+
+        public async Task<UserServiceModel> GetUser(int id)
+        {
+            User user = await _userRepository.GetUserById(id);
 
             return new UserServiceModel
             {

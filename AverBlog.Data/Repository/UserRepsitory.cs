@@ -75,6 +75,16 @@ namespace AverBlog.Data.Repository
             return (totalRecordsMatched , userMaterialisedList) ; 
         }
 
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            _context.Users.Where(x => x.Email == email);
+            var user = await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+       
+            return user;
+        }
+
+
         public async Task<User> UpdateUser(User user)
         {
             _context.Users.Update(user);

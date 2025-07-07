@@ -22,6 +22,9 @@ namespace AverBlog.Data.Enitities
         public string ProfileImageUrl { get; set; }
         public DateTime JoinedOn { get; set; }
 
+        [Required]
+        public string Password { get; set; }
+
         public List<Post> Posts { get; set; }
     }
 }

@@ -8,6 +8,11 @@ namespace AverBlog.Api.ApiDtos
         public string  UserName { get; set; }
         [Required]
         public string  Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+        
+ 
     }
 
     public class UserUpdateRequest
@@ -20,6 +25,7 @@ namespace AverBlog.Api.ApiDtos
         [Required]
         [Url]
         public string ProfileImageUrl { get; set; }
-       
+
+ 
     }
 }
