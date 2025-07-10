@@ -88,7 +88,9 @@ namespace AverBlog.Business.Services
                 FullName = user.FullName,
                 Bio = user.Bio,
                 JoinedOn = user.JoinedOn,
+                Role = user.Role,
                 ProfileImageUrl = user.ProfileImageUrl
+                
             };
         }
 
@@ -115,6 +117,7 @@ namespace AverBlog.Business.Services
                 FullName = user.FullName,
                 Bio = user.Bio,
                 JoinedOn = user.JoinedOn,
+                Role = user.Role,
                 ProfileImageUrl = user.ProfileImageUrl
             };
 
@@ -134,6 +137,25 @@ namespace AverBlog.Business.Services
                 JoinedOn = user.JoinedOn,
                 ProfileImageUrl = user.ProfileImageUrl
             };
+        }
+
+        public async Task<IEnumerable<PostServiceModel>> GetUserTimeline(int id)
+        {
+            var posts = await _userRepository.GetUserTimeline(id);
+
+            if(posts == null)
+                throw new NotFoundException($"User with id {id} not found.");
+
+            return posts.Select(x => new PostServiceModel
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Content = x.Content,
+                CreatedAt = x.CreatedAt,
+                Category = x.Category,
+                IsPublished = x.IsPublished,
+                UserId=x.UserId
+            });
         }
     }
 }

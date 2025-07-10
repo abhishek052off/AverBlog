@@ -37,7 +37,7 @@ namespace AverBlog.Api.Controllers
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-
+                Role = user.Role,
                 Token = token
             };
             return Ok(response);
@@ -58,7 +58,8 @@ namespace AverBlog.Api.Controllers
                 new Claim( ClaimTypes.Name, user.Username), //ClaimTypes.Name
                 new Claim(ClaimTypes.NameIdentifier , user.Id.ToString()),//ClaimTypes.NameIdentifier
                 new Claim(ClaimTypes.Email , user.Email), //ClaimTypes.Email
-                new Claim("full-name", user.FullName)
+                new Claim("full-name", user.FullName),
+                new Claim(ClaimTypes.Role , user.Role)
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -69,6 +70,7 @@ namespace AverBlog.Api.Controllers
                 audience: audience,
                 expires: DateTime.Now.AddMinutes(Convert.ToDouble(expirationMinutes)),
                 claims: claims,
+
                 signingCredentials: credentials
             );
 

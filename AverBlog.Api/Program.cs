@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 namespace AverBlog.Api
@@ -99,6 +100,14 @@ namespace AverBlog.Api
                                 return Task.CompletedTask;
                             }
                         };
+                    });
+
+                builder.Services.AddAuthorization(
+                    options =>
+                    {
+                        options.AddPolicy("AdminOnlyPolicy", policy=> policy.RequireClaim(ClaimTypes.Role , "Admin"));
+                        options.AddPolicy("AdminAndSales", policy=> policy.RequireAssertion( context=> context.User.IsInRole("Admin") || context.User.IsInRole("Sales") ) );
+                        
                     });
 
                 builder.Services.AddScoped<IUserService , UserService>();

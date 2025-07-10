@@ -63,6 +63,7 @@ namespace AverBlog.Api.Controllers
 
 
         [HttpGet("users")]
+        [Authorize(Policy = "AdminOnlyPolicy")]
         public async Task< ActionResult< PaginatedResponse<UserResponse>>> GetUsers([FromQuery] UserFilter request)
         {
             (int count , List<UserServiceModel>? userServiceList) = await _userService.GetUsers(request.KeyWord,request.JoinedAfter, request.StartIndex , request.PageSize);

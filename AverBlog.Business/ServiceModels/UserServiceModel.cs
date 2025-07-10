@@ -17,7 +17,7 @@ namespace AverBlog.Business.ServiceModels
         public string Bio { get; set; }
         public string ProfileImageUrl { get; set; }
         public DateTime JoinedOn { get; set; }
-
+        public string Role { get; set; }
         public int PostCount { get; set; }
     }
 }

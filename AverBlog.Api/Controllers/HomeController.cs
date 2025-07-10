@@ -47,6 +47,13 @@ namespace AverBlog.Api.Controllers
 
         }
 
+        [HttpGet("user-timeline")]
+        public async Task<ActionResult<List<PostServiceModel>>> GetUserTimeline()
+        {
+            var posts = await _userService.GetUserTimeline(_session.Id);
+            return Ok(posts);
+        }
+
 
 
     }

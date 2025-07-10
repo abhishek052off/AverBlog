@@ -26,5 +26,7 @@ namespace AverBlog.Data.Enitities
         public string Password { get; set; }
 
         public List<Post> Posts { get; set; }
+
+        public string Role { get; set; }
     }
 }

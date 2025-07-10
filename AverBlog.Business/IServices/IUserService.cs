@@ -8,6 +8,7 @@ namespace AverBlog.Business.IServices
         Task<UserServiceModel> CreateUser(string userName, string email, string password);
         Task<UserServiceModel> GetUser(int id);
         Task<(int count, List<UserServiceModel>)> GetUsers(string keyWord, DateTime joinedAfter, int startIndex, int pageSize);
+        Task<IEnumerable<PostServiceModel>> GetUserTimeline(int id);
         Task<UserServiceModel> UpdateUser(int id, string bio, string fullName, string profileImageUrl);
     }
 }

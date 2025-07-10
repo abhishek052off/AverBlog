@@ -92,5 +92,26 @@ namespace AverBlog.Data.Repository
 
             return user;
         }
+
+        public async Task<List<Post>> GetUserTimelineAlt(int id)
+        {
+            var userWithPosts = await _context.Users.Where(x => x.Id == id).Include(x => x.Posts).FirstOrDefaultAsync();
+            
+            if(userWithPosts == null)
+                return null;
+
+
+            return userWithPosts.Posts;
+        }
+
+        //Assume this is in Posts Repo
+        public async Task<List<Post>> GetUserTimeline(int id)
+        {
+            IQueryable<Post> posts = _context.Posts.Where(x=> x.UserId == id);
+
+            posts= posts.OrderByDescending(x => x.CreatedAt);
+
+            return await posts.ToListAsync();
+        }
     }
 }

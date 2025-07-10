@@ -18,11 +18,22 @@ namespace AverBlog.Data.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+             
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+            modelBuilder.Entity<User>()
+                  .Property(u => u.Role)
+                  .HasDefaultValue("User")
+                ;
+
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Posts)
                 .WithOne(p => p.User)
                 .HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                ;
+        } 
     }
 }
