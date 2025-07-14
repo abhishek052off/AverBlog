@@ -113,5 +113,17 @@ namespace AverBlog.Data.Repository
 
             return await posts.ToListAsync();
         }
+
+        public async Task<List<UserPostAnalysticsDto>> GetMostActiveUsers()
+        {
+            List<UserPostAnalysticsDto> users = _context.Users.Select(x=> new UserPostAnalysticsDto
+             {
+                 UserId = x.Id,
+                 UserName  = x.Username,
+                 PostCount =x.Posts.Count
+             }).OrderByDescending(x => x.PostCount).ToList();
+
+            return users;
+        }
     }
 }

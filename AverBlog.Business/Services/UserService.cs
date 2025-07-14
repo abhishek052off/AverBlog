@@ -157,5 +157,19 @@ namespace AverBlog.Business.Services
                 UserId=x.UserId
             });
         }
+
+        public async Task<List<UserPostAnalysticsServiceDto>> GetMostActiveUsers()
+        {
+            var users = await _userRepository.GetMostActiveUsers();
+
+            var serviceModelList = users.Select(x => new UserPostAnalysticsServiceDto
+            {
+                UserId = x.UserId,
+                UserName = x.UserName,
+                PostCount = x.PostCount,
+            }).ToList() ;
+
+            return serviceModelList;
+        }
     }
 }
